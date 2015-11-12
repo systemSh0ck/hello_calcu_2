@@ -8,6 +8,11 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+	NumberButton numButton = new NumberButton();
+	OperationButton opButton = new OperationButton();
+	Number num = new Number();
+	boolean firstNumber = true;
+	boolean resultAvailable = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,46 +60,89 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	@Override
 	public void onClick(View v) {
-		TextView resultTV = (TextView)findViewById(R.id.result_view);
+
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
 		switch (v.getId()) {
 			case R.id.number1:
+				pressNumber("1");
 				break;
 			case R.id.number2:
+				pressNumber("2");
 				break;
 			case R.id.number3:
+				pressNumber("3");
 				break;
 			case R.id.number4:
+				pressNumber("4");
 				break;
 			case R.id.number5:
+				pressNumber("5");
 				break;
 			case R.id.number6:
+				pressNumber("6");
 				break;
 			case R.id.number7:
+				pressNumber("7");
 				break;
 			case R.id.number8:
+				pressNumber("8");
 				break;
 			case R.id.number9:
+				pressNumber("9");
 				break;
 			case R.id.number0:
+				pressNumber("0");
 				break;
 			case R.id.operation_plus:
+				pressOperation("+");
 				break;
 			case R.id.operation_minus:
+				opButton.writeOperator(operationsTV, "-");
 				break;
 			case R.id.operation_mult:
+				opButton.writeOperator(operationsTV, "*");
 				break;
 			case R.id.operation_div:
+				opButton.writeOperator(operationsTV, "/");
 				break;
 			case R.id.operation_sqare:
+				opButton.writeOperator(operationsTV, "^");
 				break;
 			case R.id.operation_sqrt:
+				opButton.writeOperator(operationsTV, "sqrt");
 				break;
 			case R.id.operation_equals:
 				break;
 			case R.id.operation_clear:
 				break;
+		}
+	}
+
+	public void pressNumber(String pressedNumber){
+		TextView resultTV = (TextView)findViewById(R.id.result_view);
+		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
+		numButton.writeNumber(operationsTV, pressedNumber);
+		numButton.writeNumber(resultTV, pressedNumber);
+		num.appendNumber(pressedNumber, firstNumber);
+	}
+
+	public void pressOperation(String operation){
+		TextView resultTV = (TextView)findViewById(R.id.result_view);
+		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
+		opButton.writeOperator(operationsTV, operation);
+		if(firstNumber){
+			num.setOperator2(num.getOperator1());
+			num.setOperator1("");
+			firstNumber = false;
+		}else if (firstNumber == false) {
+			num.setResult(String.valueOf(opButton.calculate(
+					Double.parseDouble(num.getOperator1()),
+					Double.parseDouble(num.getOperator2()),
+					operation
+			)));
+			firstNumber = true;
+			resultTV.setText(num.getResult());
 		}
 	}
 }
