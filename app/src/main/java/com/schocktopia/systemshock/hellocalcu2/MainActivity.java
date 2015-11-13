@@ -98,23 +98,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				pressOperation("+");
 				break;
 			case R.id.operation_minus:
-				opButton.writeOperator(operationsTV, "-");
+				pressOperation("-");
 				break;
 			case R.id.operation_mult:
-				opButton.writeOperator(operationsTV, "*");
+				pressOperation("*");
 				break;
 			case R.id.operation_div:
-				opButton.writeOperator(operationsTV, "/");
+				pressOperation("/");
 				break;
 			case R.id.operation_sqare:
-				opButton.writeOperator(operationsTV, "^");
+				pressOperation("^");
 				break;
 			case R.id.operation_sqrt:
-				opButton.writeOperator(operationsTV, "sqrt");
+				pressOperation("sqrt");
 				break;
 			case R.id.operation_equals:
 				break;
 			case R.id.operation_clear:
+				pressClear();
 				break;
 		}
 	}
@@ -123,26 +124,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 		numButton.writeNumber(operationsTV, pressedNumber);
-		numButton.writeNumber(resultTV, pressedNumber);
+		if (num.getResult().length() > 0) {
+			resultTV.setText(num.getResult());
+		} else {
+			numButton.writeNumber(resultTV, pressedNumber);
+		}
 		num.appendNumber(pressedNumber, firstNumber);
 	}
 
 	public void pressOperation(String operation){
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
-		opButton.writeOperator(operationsTV, operation);
-		if(firstNumber){
-			num.setOperator2(num.getOperator1());
-			num.setOperator1("");
-			firstNumber = false;
-		}else if (firstNumber == false) {
-			num.setResult(String.valueOf(opButton.calculate(
-					Double.parseDouble(num.getOperator1()),
-					Double.parseDouble(num.getOperator2()),
-					operation
-			)));
-			firstNumber = true;
-			resultTV.setText(num.getResult());
+		if (operationsTV.getText().toString().charAt(
+				operationsTV.getText().toString().length()-1) != ' ') {
+			opButton.writeOperator(operationsTV, operation);
+			if(firstNumber){
+				resultTV.setText("");
+				firstNumber = false;
+			}else if (!firstNumber) {
+				num.setResult(String.valueOf(opButton.calculate(
+						Double.parseDouble(num.getOperator1()),
+						Double.parseDouble(num.getOperator2()),
+						operation
+				)));
+				num.setOperator1(num.getResult());
+				num.setOperator2("");
+				resultTV.setText("");
+				resultTV.setText(num.getResult());
+			}
 		}
+	}
+
+	public void pressClear(){
+		num.setResult("");
+		num.setOperator1("");
+		num.setOperator2("");
+		TextView resultTV = (TextView)findViewById(R.id.result_view);
+		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
+		resultTV.setText("");
+		operationsTV.setText("");
+		firstNumber = true;
 	}
 }
