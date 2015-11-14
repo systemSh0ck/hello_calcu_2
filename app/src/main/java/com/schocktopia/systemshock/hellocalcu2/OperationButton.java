@@ -32,9 +32,9 @@ public class OperationButton {
 			case "/":
 				return op1 / op2;
 			case "^":
-				return op1 * op1;
+				return op2 * op2;
 			case "sqrt":
-				return Math.sqrt(op1);
+				return Math.sqrt(op2);
 			default:
 				return 0.0;
 		}

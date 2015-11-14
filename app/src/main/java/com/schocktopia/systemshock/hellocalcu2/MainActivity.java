@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	NumberButton numButton = new NumberButton();
 	OperationButton opButton = new OperationButton();
 	Number num = new Number();
+	String op = "";
 	boolean firstNumber = true;
 	boolean resultAvailable = false;
 
@@ -56,6 +57,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		operationEquals.setOnClickListener(this);
 		Button operationClear = (Button)findViewById(R.id.operation_clear);
 		operationClear.setOnClickListener(this);
+	}
+
+	@Override
+	public void onStop(){
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
 	}
 
 	@Override
@@ -107,12 +118,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				pressOperation("/");
 				break;
 			case R.id.operation_sqare:
+				//TODO: square
 				pressOperation("^");
 				break;
 			case R.id.operation_sqrt:
+				//TODO: sqrt
 				pressOperation("sqrt");
 				break;
 			case R.id.operation_equals:
+				pressEquals();
 				break;
 			case R.id.operation_clear:
 				pressClear();
@@ -135,8 +149,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public void pressOperation(String operation){
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
-		if (operationsTV.getText().toString().charAt(
-				operationsTV.getText().toString().length()-1) != ' ') {
+		if (operationsTV.getText().length() > 0 &&
+				operationsTV.getText().toString().charAt(
+				operationsTV.getText().toString().length() - 1) != ' ') {
 			opButton.writeOperator(operationsTV, operation);
 			if(firstNumber){
 				resultTV.setText("");
@@ -145,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				num.setResult(String.valueOf(opButton.calculate(
 						Double.parseDouble(num.getOperator1()),
 						Double.parseDouble(num.getOperator2()),
-						operation
+						op
 				)));
 				num.setOperator1(num.getResult());
 				num.setOperator2("");
@@ -153,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				resultTV.setText(num.getResult());
 			}
 		}
+		op = operation;
 	}
 
 	public void pressClear(){
@@ -164,5 +180,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		resultTV.setText("");
 		operationsTV.setText("");
 		firstNumber = true;
+	}
+
+	public void pressEquals(){
+		TextView resultTV = (TextView)findViewById(R.id.result_view);
+		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
+		if (operationsTV.getText().toString().charAt(
+				operationsTV.getText().toString().length() - 1) != ' ') {
+			num.setResult(String.valueOf(
+					opButton.calculate(Double.parseDouble(num.getOperator1()),
+							Double.parseDouble(num.getOperator2()),
+							op)
+			));
+			resultTV.setText(num.getResult());
+		}
 	}
 }
