@@ -17,11 +17,11 @@ public class OperationButton {
 		this.tv = tv;
 	}
 
-	public void writeOperator(TextView tv, String operator){
+	public void WriteOperator(TextView tv, String operator){
 		tv.append(" "+operator+" ");
 	}
 
-	public static double calculate(double op1, double op2, String operator){
+	public static double Calculate(double op1, double op2, String operator){
 		switch(operator){
 			case "+":
 				return op1 + op2;
@@ -31,12 +31,16 @@ public class OperationButton {
 				return op1 * op2;
 			case "/":
 				return op1 / op2;
-			case "^":
-				return op2 * op2;
-			case "sqrt":
-				return Math.sqrt(op2);
 			default:
 				return 0.0;
 		}
+	}
+
+	public static double CalculateSquare(double num){
+		return num * num;
+	}
+
+	public static double CalculateSqRt(double num){
+		return Math.sqrt(num);
 	}
 }
