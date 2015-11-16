@@ -8,6 +8,7 @@ import android.widget.TextView;
  */
 public class OperationButton {
 	private TextView tv;
+	private String op = "";
 
 	public TextView getTv() {
 		return tv;
@@ -17,30 +18,15 @@ public class OperationButton {
 		this.tv = tv;
 	}
 
-	public void WriteOperator(TextView tv, String operator){
+	public String getOp() {
+		return op;
+	}
+
+	public void setOp(String op) {
+		this.op = op;
+	}
+
+	public void writeOperator(TextView tv, String operator){
 		tv.append(" "+operator+" ");
-	}
-
-	public static double Calculate(double op1, double op2, String operator){
-		switch(operator){
-			case "+":
-				return op1 + op2;
-			case "-":
-				return op1 - op2;
-			case "*":
-				return op1 * op2;
-			case "/":
-				return op1 / op2;
-			default:
-				return 0.0;
-		}
-	}
-
-	public static double CalculateSquare(double num){
-		return num * num;
-	}
-
-	public static double CalculateSqRt(double num){
-		return Math.sqrt(num);
 	}
 }

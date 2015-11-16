@@ -4,30 +4,12 @@ package com.schocktopia.systemshock.hellocalcu2;
  * Created by systemshock on 12/11/2015.
  */
 public class Number {
-	private String operator1;
-	private String operator2;
-	private String result;
+	private String result = "";
+	private String number = "";
 
 	public Number(){
-		this.setOperator1("");
-		this.setOperator2("");
 		this.setResult("");
-	}
-
-	public String getOperator1() {
-		return operator1;
-	}
-
-	public void setOperator1(String operator1) {
-		this.operator1 = operator1;
-	}
-
-	public String getOperator2() {
-		return operator2;
-	}
-
-	public void setOperator2(String operator2) {
-		this.operator2 = operator2;
+		this.setNumber("");
 	}
 
 	public String getResult() {
@@ -38,11 +20,38 @@ public class Number {
 		this.result = result;
 	}
 
-	public void appendNumber(String digit, boolean firstNum){
-		if(firstNum){
-			operator1 += digit;
-		}else{
-			operator2 += digit;
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public static String calculateNumber(String num, String res, String op){
+		switch(op){
+			case "+":
+				return String.valueOf(
+						Double.parseDouble(num) +
+						Double.parseDouble(res)
+				);
+			case "-":
+				return String.valueOf(
+						Double.parseDouble(num) -
+						Double.parseDouble(res)
+				);
+			case "*":
+				return String.valueOf(
+						Double.parseDouble(num) *
+						Double.parseDouble(res)
+				);
+			case "/":
+				return String.valueOf(
+						Double.parseDouble(num) /
+						Double.parseDouble(res)
+				);
+			default:
+				return "";
 		}
 	}
 }

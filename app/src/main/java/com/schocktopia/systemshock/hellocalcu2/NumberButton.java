@@ -19,4 +19,8 @@ public class NumberButton {
 	public void writeNumber(TextView tv, String num){
 		tv.append(num);
 	}
+
+	public void buildNumber(String numberToAdd, Number num){
+		num.setResult(num.getResult() + numberToAdd);
+	}
 }

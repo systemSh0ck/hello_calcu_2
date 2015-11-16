@@ -11,7 +11,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	NumberButton numButton = new NumberButton();
 	OperationButton opButton = new OperationButton();
 	Number num = new Number();
-	String op = "";
 	boolean firstNumber = true;
 
 	@Override
@@ -115,11 +114,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				pressOperation("/");
 				break;
 			case R.id.operation_sqare:
-				pressSquare();
+				pressSquare("^");
 				break;
 			case R.id.operation_sqrt:
 				//TODO: sqrt
-				pressOperation("sqrt");
+				pressSquare("sqrt");
 				break;
 			case R.id.operation_equals:
 				pressEquals();
@@ -135,13 +134,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
+		//logic
+		numButton.buildNumber(pressedNumber, num);
+		//display
+		numButton.writeNumber(resultTV, pressedNumber);
 		numButton.writeNumber(operationsTV, pressedNumber);
-		if (num.getResult().length() > 0) {
-			resultTV.setText(num.getResult());
-		} else {
-			numButton.writeNumber(resultTV, pressedNumber);
-		}
-		num.appendNumber(pressedNumber, firstNumber);
 	}
 
 	public void pressOperation(String operation){
@@ -149,38 +146,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
-		/*first-level 'if' -> checks to see if the last button hit is an operation
-		*	and skips if true
-		*second-level 'if's -> checks to see which operand the user is inputting
-		*/
-		if (operationsTV.getText().length() > 0 &&
-				operationsTV.getText().toString().charAt(
-				operationsTV.getText().toString().length() - 1) != ' ') {
-			opButton.WriteOperator(operationsTV, operation);
-			if(firstNumber){
-				resultTV.setText("");
-				firstNumber = false;
-			}else if (!firstNumber) {
-				num.setResult(String.valueOf(opButton.Calculate(
-						Double.parseDouble(num.getOperator1()),
-						Double.parseDouble(num.getOperator2()),
-						op
-				)));
-				num.setOperator1(num.getResult());
-				num.setOperator2("");
-				resultTV.setText("");
-				resultTV.setText(num.getResult());
-			}
+		//logic
+		if(opButton.getOp().length() > 0){
+			num.setResult(num.calculateNumber(
+					num.getNumber(),
+					num.getResult(),
+					operation
+			));
+			opButton.setOp(operation);
+		}else{
+			opButton.setOp(operation);
+			num.setNumber(num.getResult());
+			num.setResult("");
 		}
-		op = operation;
+
+		//display
+		if(num.getResult().length() == 0){
+			resultTV.setText("");
+		}
+		opButton.writeOperator(operationsTV, operation);
 	}
 
 	public void pressClear(){
-		num.setResult("");
-		num.setOperator1("");
-		num.setOperator2("");
+
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
+
+		num.setResult("");
+		num.setNumber("");
 		resultTV.setText("");
 		operationsTV.setText("");
 		firstNumber = true;
@@ -188,39 +181,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	public void pressEquals(){
 
-		TextView resultTV = (TextView)findViewById(R.id.result_view);
-		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
-
-		if (operationsTV.getText().toString().charAt(
-				operationsTV.getText().toString().length() - 1) != ' ') {
-			num.setResult(String.valueOf(
-					opButton.Calculate(Double.parseDouble(num.getOperator1()),
-							Double.parseDouble(num.getOperator2()),
-							op)
-			));
-			resultTV.setText(num.getResult());
-		}
 	}
 
-	public void pressSquare(){
+	public void pressSquare(String op){
 
-		TextView resultTV = (TextView)findViewById(R.id.result_view);
-		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
-
-		if(firstNumber){
-			num.setResult(String.valueOf(
-					opButton.CalculateSquare(Double.parseDouble(num.getOperator1()))));
-			resultTV.setText(num.getResult());
-			operationsTV.append(" ^ ");
-			num.setOperator1(num.getResult());
-		}else{
-			if (num.getResult().length() > 0) {
-				num.setOperator2(num.getResult());
-				num.setResult(String.valueOf(
-						opButton.CalculateSquare(Double.parseDouble(num.getOperator2()))));
-				resultTV.setText(num.getResult());
-				operationsTV.append(" ^ ");
-			}
-		}
 	}
 }
