@@ -32,26 +32,32 @@ public class Number {
 		switch(op){
 			case "+":
 				return String.valueOf(
-						Double.parseDouble(num) +
-						Double.parseDouble(res)
-				);
+						Integer.parseInt(num) + Integer.parseInt(res)
+						);
 			case "-":
 				return String.valueOf(
-						Double.parseDouble(num) -
-						Double.parseDouble(res)
+						Integer.parseInt(num) - Integer.parseInt(res)
 				);
 			case "*":
 				return String.valueOf(
-						Double.parseDouble(num) *
-						Double.parseDouble(res)
+						Integer.parseInt(num) * Integer.parseInt(res)
 				);
 			case "/":
 				return String.valueOf(
-						Double.parseDouble(num) /
-						Double.parseDouble(res)
+						Double.parseDouble(num) / Double.parseDouble(res)
 				);
 			default:
 				return "";
+		}
+	}
+
+	public static String calculateSquare(String num, String op){
+		if(op.equals("^")){
+			return String.valueOf(Double.parseDouble(num) * Double.parseDouble(num));
+		}else if(op.equals("sqrt")){
+			return String.valueOf(Math.sqrt(Double.parseDouble(num)));
+		}else{
+			return "";
 		}
 	}
 }
