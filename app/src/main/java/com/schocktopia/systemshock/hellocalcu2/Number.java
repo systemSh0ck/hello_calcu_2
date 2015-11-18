@@ -29,22 +29,27 @@ public class Number {
 	}
 
 	public static String calculateNumber(String num, String res, String op){
+		//TODO: fix var types
 		switch(op){
 			case "+":
 				return String.valueOf(
-						Integer.parseInt(num) + Integer.parseInt(res)
+						Double.parseDouble(convertNumber(num))
+								+ Double.parseDouble(convertNumber(res))
 						);
 			case "-":
 				return String.valueOf(
-						Integer.parseInt(num) - Integer.parseInt(res)
+						Double.parseDouble(convertNumber(num))
+								- Double.parseDouble(convertNumber(res))
 				);
 			case "*":
 				return String.valueOf(
-						Integer.parseInt(num) * Integer.parseInt(res)
+						Double.parseDouble(convertNumber(num))
+								* Double.parseDouble(convertNumber(res))
 				);
 			case "/":
 				return String.valueOf(
-						Double.parseDouble(num) / Double.parseDouble(res)
+						Double.parseDouble(convertNumber(num))
+								/ Double.parseDouble(convertNumber(res))
 				);
 			default:
 				return "";
@@ -58,6 +63,16 @@ public class Number {
 			return String.valueOf(Math.sqrt(Double.parseDouble(num)));
 		}else{
 			return "";
+		}
+	}
+
+	private static String convertNumber(String num){
+		double dbl = Double.parseDouble(num);
+
+		if(dbl == (long) dbl){
+			return String.format("%d", (long)dbl);
+		}else{
+			return String.format("%s", dbl);
 		}
 	}
 }

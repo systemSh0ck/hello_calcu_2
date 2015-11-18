@@ -173,6 +173,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
+		if(opButton.getOp().length() > 0){
+			pressOperation(opButton.getOp());
+		}
 		if(num.getResult().length() > 0){
 			num.setNumber(num.calculateSquare(
 					num.getResult(),
@@ -180,6 +183,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			));
 			resultTV.setText(num.getNumber());
 			num.setResult("");
+		}else if(num.getNumber().length() > 0){
+			num.setNumber(num.calculateSquare(
+					num.getNumber(),
+					op
+			));
+			resultTV.setText(num.getNumber());
+			num.setResult("");
+		}else{
+
 		}
 
 	}
