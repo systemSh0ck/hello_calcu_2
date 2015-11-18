@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	NumberButton numButton = new NumberButton();
 	OperationButton opButton = new OperationButton();
 	Number num = new Number();
+	boolean newNumber = true;
+	boolean newOperation = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,10 +134,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
+		if(newNumber){
+			num.setResult("");
+			resultTV.setText("");
+		}
+		newNumber = false;
 		numButton.buildNumber(pressedNumber, num);
-		resultTV.setText("");
-		numButton.writeNumber(resultTV, num.getResult());
 		numButton.writeNumber(operationsTV, pressedNumber);
+		resultTV.setText(num.getResult());
 	}
 
 	public void pressOperation(String operation){
@@ -143,27 +149,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
-		if (operationsTV.getText().length() > 0 &&
-				operationsTV.getText().charAt(
-				operationsTV.getText().length() - 1) != ' ') {
-			if(opButton.getOp().length() > 0){
-				num.setResult(num.calculateNumber(
-						num.getNumber(),
-						num.getResult(),
-						opButton.getOp()
-				));
-				num.setNumber(num.getResult());
-				resultTV.setText(num.getResult());
-				num.setResult("");
-			}else{
-				num.setNumber(num.getResult());
-				num.setResult("");
-				resultTV.setText("");
-			}
+		if (opButton.getOp().length() == 0) {
 			opButton.setOp(operation);
-
-			opButton.writeOperator(operationsTV, operation);
+			num.setNumber(num.getResult());
+			num.setResult("");
+		} else {
+			num.setNumber(num.calculateNumber(
+					num.getNumber(),
+					num.getResult(),
+					opButton.getOp()
+			));
+			num.setResult("");
+			opButton.setOp(operation);
 		}
+
+		resultTV.setText(num.getNumber());
+		opButton.writeOperator(operationsTV, opButton.getOp());
+		newNumber = true;
 	}
 
 	public void pressSquare(String op){
@@ -171,19 +173,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
-		if (operationsTV.getText().length() > 0 &&
-				operationsTV.getText().charAt(
-				operationsTV.getText().length() - 1) != ' ') {
-			if(opButton.getOp().length() == 0) {
-				num.setResult(num.calculateSquare(num.getResult(), op));
-				opButton.setOp("");
-			}else{
-				pressOperation(opButton.getOp());
-				num.setResult(num.calculateSquare(num.getNumber(), op));
-				opButton.setOp("");
-			}
-			resultTV.setText(num.getResult());
+		if(num.getResult().length() > 0){
+			num.setNumber(num.calculateSquare(
+					num.getResult(),
+					op
+			));
+			resultTV.setText(num.getNumber());
+			num.setResult("");
 		}
+
 	}
 
 	public void pressEquals(){
@@ -191,19 +189,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
-		if (operationsTV.getText().length() > 0 &&
-				operationsTV.getText().charAt(
-				operationsTV.getText().length() - 1) != ' ') {
-			num.setResult(num.calculateNumber(
-					num.getNumber(),
-					num.getResult(),
-					opButton.getOp()
-			));
-			num.setNumber(num.getResult());
-			resultTV.setText(num.getResult());
-			opButton.setOp("");
-			operationsTV.setText("");
-		}
+		num.setNumber(num.calculateNumber(
+			num.getNumber(),
+			num.getResult(),
+			opButton.getOp())
+		);
+		resultTV.setText(num.getNumber());
+		operationsTV.setText(num.getNumber());
+		num.setResult(num.getNumber());
+		opButton.setOp("");
+		newNumber = true;
 	}
 
 	public void pressClear(){
@@ -215,5 +210,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		num.setNumber("");
 		resultTV.setText("");
 		operationsTV.setText("");
+		newNumber = true;
 	}
 }
