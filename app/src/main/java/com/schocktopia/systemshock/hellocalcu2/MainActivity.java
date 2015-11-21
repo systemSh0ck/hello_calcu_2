@@ -12,7 +12,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	OperationButton opButton = new OperationButton();
 	Number num = new Number();
 	boolean newNumber = true;
-	boolean newOperation = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -149,23 +148,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
-		if (opButton.getOp().length() == 0) {
-			opButton.setOp(operation);
-			num.setNumber(num.getResult());
-			num.setResult("");
-		} else {
-			num.setNumber(num.calculateNumber(
-					num.getNumber(),
-					num.getResult(),
-					opButton.getOp()
-			));
-			num.setResult("");
-			opButton.setOp(operation);
-		}
+		if (operationsTV.getText().length() > 0 &&
+				operationsTV.getText().charAt(
+				operationsTV.getText().length() - 1) != ' ') {
+			if (opButton.getOp().length() == 0) {
+				opButton.setOp(operation);
+				num.setNumber(num.getResult());
+				num.setResult("");
+			} else {
+				num.setNumber(num.calculateNumber(
+						num.getNumber(),
+						num.getResult(),
+						opButton.getOp()
+				));
+				num.setResult("");
+				opButton.setOp(operation);
+			}
 
-		resultTV.setText(num.getNumber());
-		opButton.writeOperator(operationsTV, opButton.getOp());
-		newNumber = true;
+			resultTV.setText(num.getNumber());
+			opButton.writeOperator(operationsTV, opButton.getOp());
+			newNumber = true;
+		}
 	}
 
 	public void pressSquare(String op){
@@ -173,27 +176,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
-		if(opButton.getOp().length() > 0){
-			pressOperation(opButton.getOp());
-		}
-		if(num.getResult().length() > 0){
-			num.setNumber(num.calculateSquare(
-					num.getResult(),
-					op
-			));
-			resultTV.setText(num.getNumber());
-			num.setResult("");
-		}else if(num.getNumber().length() > 0){
-			num.setNumber(num.calculateSquare(
-					num.getNumber(),
-					op
-			));
-			resultTV.setText(num.getNumber());
-			num.setResult("");
-		}else{
+		if (operationsTV.getText().length() > 0 &&
+				operationsTV.getText().charAt(
+						operationsTV.getText().length() - 1) != ' ') {
+			if(opButton.getOp().length() > 0){
+				pressOperation(opButton.getOp());
+			}
+			if(num.getResult().length() > 0){
+				num.setNumber(num.calculateSquare(
+						num.getResult(),
+						op
+				));
+				resultTV.setText(num.getNumber());
+				num.setResult("");
+			}else if(num.getNumber().length() > 0){
+				num.setNumber(num.calculateSquare(
+						num.getNumber(),
+						op
+				));
+				resultTV.setText(num.getNumber());
+				num.setResult("");
+			}else{
 
+			}
 		}
-
 	}
 
 	public void pressEquals(){
@@ -201,16 +207,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		TextView resultTV = (TextView)findViewById(R.id.result_view);
 		TextView operationsTV = (TextView)findViewById(R.id.operations_view);
 
-		num.setNumber(num.calculateNumber(
-			num.getNumber(),
-			num.getResult(),
-			opButton.getOp())
-		);
-		resultTV.setText(num.getNumber());
-		operationsTV.setText(num.getNumber());
-		num.setResult(num.getNumber());
-		opButton.setOp("");
-		newNumber = true;
+		if (operationsTV.getText().length() > 0 &&
+				operationsTV.getText().charAt(
+						operationsTV.getText().length() - 1) != ' ') {
+			num.setNumber(num.calculateNumber(
+				num.getNumber(),
+				num.getResult(),
+				opButton.getOp())
+			);
+			resultTV.setText(num.getNumber());
+			operationsTV.setText(num.getNumber());
+			num.setResult(num.getNumber());
+			opButton.setOp("");
+			newNumber = true;
+		}
 	}
 
 	public void pressClear(){
@@ -220,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		num.setResult("");
 		num.setNumber("");
+		opButton.setOp("");
 		resultTV.setText("");
 		operationsTV.setText("");
 		newNumber = true;
